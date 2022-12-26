@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Start</title>
+    <script
+            src="https://code.jquery.com/jquery-3.6.2.min.js"
+            integrity="sha256-2krYZKh//PcchRtd+H+VyyQoZ/e3EcrkxhM8ycwASPA="
+            crossorigin="anonymous"></script>
+    <script type="text/javascript" src="/js/loadingoverlay.js" ></script>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+
+
+<div id="nbackContainer">
+    <div id="nbackWrapper">
+
+    <div id="progressInfo">
+    </div>
+
+    <div id="cardContainer">
+    </div>
+
+    <div id="bottonContainer">
+        <div>
+        <div class="buttonWrapper">
+        <div class="button"><div><</div></div><div>두번째 전과 같으면</div>
+        </div>
+        <div class="buttonWrapper">
+        <div class="button"><div>></div></div><div>세번째 전과 같으면</div>
+        </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    let countdown = 3;
+
+    //반복실행되는 콜백함수
+    const countHandler = () => {
+
+        console.log(countdown);
+        if (countdown === 0) {
+            clearInterval(interval);
+        } else {
+            $.LoadingOverlay("show", {
+                text : String(countdown),
+            });
+
+            setTimeout(function(){
+                $.LoadingOverlay("hide");
+            }, 1000);
+        }
+        countdown = countdown-1;
+    }
+
+    let interval = setInterval(countHandler, 1500);
+
+
+</script>
+
+<script>
+
+    //이벤트 리스너
+    const timeoutListener = (eventName) => {
+        return new Promise((resolve, reject) => {
+            let timer, listener;
+            listener = (e) => {
+                clearTimeout(timer);
+                resolve(e);
+            };
+            timer = setTimeout(()=>{
+                removeEventListener(eventName, listener);
+                reject(`Time out`);
+            }, 2000);
+
+            //눌러도 타임아웃이 되는 경우
+            window.addEventListener('keydown', listener, { once : true });
+        })
+    };
+
+    const progressHandler = () => {
+
+        let progressElement = document.querySelector("#progressInfo");
+        let progressHtml = '';
+        progressHtml += `<div id="progressWrapper"><div id="progress"></div></div>`;
+        progressElement.innerHTML = progressHtml;
+
+        let progress = document.querySelector("#progress");
+        progress.style.width = '0px';
+
+    }
+
+    let progressInterval;
+    const result = []; //유저가 누른 결과
+    const cardHandler = () => {
+
+        $.ajax({
+            type:"GET",
+            url:"/cards",
+            dataType:"JSON",
+            contentType: "application/json; charset=utf-8",
+            success: (response) => {
+
+
+                let count = 0;
+                let cardContainerElement = document.querySelector("#cardContainer")
+                let cardSwitchInterval = setInterval(async ()=>{
+                    if (response.length <= count) {
+                        clearInterval(cardSwitchInterval);
+                        //nback이 다 끝나면 결과를 서버로 보내준다.
+                        //서버로 보내줄 필요 있음?
+                        $.ajax({
+                            type:"POST",
+                            url:"/result",
+                            dataType:"JSON",
+                            contentType:"application/json; charset=utf-8",
+                            data: {cards: response, result},
+                            success: (data) => console.log(data)
+                        })
+
+                    } else {
+                        //progressbar 보이기
+                        progressHandler();
+                        //progress bar set interval
+                        progressInterval = setInterval(updateProgress, 3);
+
+                        //html에 넣기
+                        let cardHtml = '';
+                        cardHtml += `<div id="cardWrapper"><img src="${response[count].path}" width="200" height="200"></div>`;
+                        cardContainerElement.innerHTML = cardHtml;
+                        count+=1;
+
+                        //이벤트 리스너
+                        try {
+                            let keyInput = await timeoutListener();
+
+                            result.push(keyInput.key);
+                            //console.log(result.key);
+                        } catch (e) {
+                            //console.error(e);
+                            result.push("miss");
+                        }
+
+                    }
+                    }, 2000);
+            },
+            error: (xhr) => {
+                //console.log(JSON.stringify(xhr));
+            }
+        })
+    }
+
+
+    setTimeout(cardHandler, 4500);
+
+    const updateProgress = () => {
+
+        let progress = document.querySelector("#progress");
+
+        const l = progress.style.width.substring(0, progress.style.width.length-2);
+
+        if (l >= 600) {
+            clearInterval(progressInterval);
+        } else {
+            //2초동안 600px를 채워야한다.
+            //2/600 초 에 1px
+            progress.style.width = `${parseInt(l)+1}px` ;
+        }
+
+    }
+
+</script>
+
+</body>
+</html>
