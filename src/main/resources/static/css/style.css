@@ -1,12 +1,22 @@
+@font-face {
+     font-family: 'LINESeedKR-Bd';
+     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/LINESeedKR-Bd.woff2') format('woff2');
+     font-weight: 700;
+     font-style: normal;
+}
+
+body {
+     font-family: 'LINESeedKR-Bd';
+}
 #nbackContainer {
      display: flex;
      justify-content: center;
-     align-items : center;
      height: 100vh;
+
 }
 
 #nbackWrapper {
-
+     padding-top: 10%;
 }
 
 #progressInfo {
@@ -15,29 +25,32 @@
 
 #progressWrapper {
      width : 600px;
-     height : 10px;
+     height : 15px;
      background-color : lightgray;
      position : relative;
+     border-radius : 10px;
 }
 
 #progress {
-     height : 10px;
+     height : 15px;
      margin : 0;
      padding : 0;
      background-color: aquamarine;
      position : absolute;
+     border-radius : 10px;
 }
 #cardContainer {
      display: flex;
      justify-content: center;
      align-items: center;
+
 }
 
 #cardWrapper {
-     border: 1px solid black;
      width : 250px;
      height : 300px;
-     border-radius: 15%;
+     border-radius: 10%;
+     box-shadow: 4px 4px 4px 4px #bebebe;
 
      display: flex;
      justify-content: center;
@@ -48,22 +61,65 @@
      display: flex;
      justify-content: center;
      align-items: center;
+     margin-top: 50px;
 }
 
 .buttonWrapper {
      display: flex;
      justify-content: center;
      align-items: center;
+     margin-top : 10px;
+     margin-bottom : 10px;
 }
 
 .button {
-     width : 30px;
-     height : 30px;
-     border: 1px solid black;
+     height:30px;
+     padding-right: 10px;
+     padding-left : 10px;
      border-radius: 10%;
      font-size: 30px;
-
+     color: white;
+     background: #FF8C8C;
+     box-shadow:4px 4px 0 #FF6464;
      display: flex;
      justify-content: center;
      align-items: center;
+     cursor: pointer;
+}
+
+.text {
+     margin-left : 5px;
+     font-size: 20px;
+}
+
+#startupContainer {
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     height: 100vh;
+}
+
+
+.startup {
+     height : 100px;
+     width : 300px;
+     font-size: 50px;
+     box-shadow:10px 10px 0 #FF6464;
+     border-radius: 20px;
+
+}
+
+.startup:hover {
+     background-color: #FF7878;
+}
+
+#title {
+     margin-bottom: 30px;
+}
+
+.titleText {
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     font-size: 40px;
 }

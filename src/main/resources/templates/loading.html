@@ -3,8 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Loading</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<button th:onclick="|location.href='@{/start}'|">start</button>
+
+<div id="startupContainer">
+    <div>
+    <div id="title">
+        <div class="titleText">N-BACK</div>
+        <div class="titleText">TRAINING</div>
+    </div>
+
+    <div class="buttonWrapper startup" th:onclick="|location.href='@{/start}'|">
+        <div class="button startup"><div>start</div></div>
+    </div>
+
+    </div>
+</div>
+
 </body>
 </html>

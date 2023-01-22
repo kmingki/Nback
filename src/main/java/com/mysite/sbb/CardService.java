@@ -49,6 +49,23 @@ public class CardService {
         //cardList의 원소를 중복으로 셔플해야된다.
         Collections.shuffle(cardList);
 
+
         return cardList;
+    }
+
+    //중복된 부분 섞는다.
+    public List<Card> shuffleCards(List<Card> list) {
+
+        for (int i = 3; i < list.size(); i++){
+            if (list.get(i-3).getShape().equals(list.get(i-2).getShape())) {
+                if (list.get(i).getShape().equals(list.get(i-2).getShape())) {
+                    Card temp = list.get(i-1);
+                    list.set(i-1, list.get(i-2));
+                    list.set(i-2, temp);
+                }
+            }
+        }
+
+        return list;
     }
 }

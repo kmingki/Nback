@@ -20,11 +20,12 @@ public class CardDto {
 
     }
 
-    public CardDto(Integer id, String shape, String path) {
+    public CardDto(Integer id, String shape, String path, LocalDateTime createDate) {
         super(); //뭐야?
         this.id = id;
         this.shape = shape;
         this.path = path;
+        this.createDate = createDate;
     }
 
     public Integer getId() {

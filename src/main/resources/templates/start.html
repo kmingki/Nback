@@ -24,14 +24,6 @@
     </div>
 
     <div id="bottonContainer">
-        <div>
-        <div class="buttonWrapper">
-        <div class="button"><div><</div></div><div>두번째 전과 같으면</div>
-        </div>
-        <div class="buttonWrapper">
-        <div class="button"><div>></div></div><div>세번째 전과 같으면</div>
-        </div>
-        </div>
     </div>
     </div>
 </div>
@@ -112,6 +104,7 @@
                 let cardSwitchInterval = setInterval(async ()=>{
                     if (response.length <= count) {
                         clearInterval(cardSwitchInterval);
+                        console.log(result);
                         //nback이 다 끝나면 결과를 서버로 보내준다.
                         //서버로 보내줄 필요 있음?
                         $.ajax({
@@ -119,8 +112,20 @@
                             url:"/result",
                             dataType:"JSON",
                             contentType:"application/json; charset=utf-8",
-                            data: {cards: response, result},
-                            success: (data) => console.log(data)
+                            data: JSON.stringify({cards: response, result}),
+                            success: (data) => {
+
+                                location.href = `/finish?score=${data}`;
+                                /*
+                                $.ajax({
+                                    type:"GET",
+                                    url:"/score",
+                                    dataType:"JSON",
+                                    contentType:"application/json; charset=utf-8",
+                                    data: { "score" : JSON.stringify(data) }
+                                })
+                                */
+                            }
                         })
 
                     } else {
@@ -133,21 +138,35 @@
                         let cardHtml = '';
                         cardHtml += `<div id="cardWrapper"><img src="${response[count].path}" width="200" height="200"></div>`;
                         cardContainerElement.innerHTML = cardHtml;
-                        count+=1;
 
-                        //이벤트 리스너
-                        try {
-                            let keyInput = await timeoutListener();
 
-                            result.push(keyInput.key);
-                            //console.log(result.key);
-                        } catch (e) {
-                            //console.error(e);
-                            result.push("miss");
+                        //버튼 html에 넣기
+                        let bottonContainerElement = document.getElementById("bottonContainer");
+                        if (count >= 3) {
+                            let buttonHtml = `<div><div class="buttonWrapper"><div class="button"><div><</div></div><div class="text">두번째 전과 같으면</div></div><div class="buttonWrapper"><div class="button"><div>></div></div><div class="text">세번째 전과 같으면</div></div><div class="buttonWrapper"><div class="button"><div>space</div></div><div class="text">같은게 없으면</div></div>`;
+
+                            bottonContainerElement.innerHTML = buttonHtml;
+
                         }
 
+                        //이벤트 리스너
+                        if (count >= 3){
+                            try {
+                                let keyInput = await timeoutListener();
+
+                                result.push(keyInput.key);
+                                console.log(keyInput.key);
+                            } catch (e) {
+                                //console.error(e);
+                                result.push("miss");
+                            }
+                        }
+
+
                     }
-                    }, 2000);
+                    console.log(count);
+                    count+=1;
+                    }, 2000); //*********************
             },
             error: (xhr) => {
                 //console.log(JSON.stringify(xhr));
