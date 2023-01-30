@@ -6,7 +6,19 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<h1>당신의 점수는</h1>
-<div th:text="${score}"></div>
+
+<div id="startupContainer">
+    <div>
+        <div id="title">
+            <div class="titleText">당신의 점수는</div>
+            <div class="titleText" th:text="${score}">TRAINING</div>
+        </div>
+
+        <div class="buttonWrapper startup" th:onclick="|location.href='@{/start}'|">
+        </div>
+
+    </div>
+</div>
+
 </body>
 </html>
