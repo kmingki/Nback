@@ -18,6 +18,7 @@ public class CardDto {
 
     public CardDto() {
 
+
     }
 
     public CardDto(Integer id, String shape, String path, LocalDateTime createDate) {
