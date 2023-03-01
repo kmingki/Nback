@@ -29,7 +29,7 @@ dependencies {
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
 	implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310" // LocalDateTime 직렬화 역직렬화
 	implementation 'com.fasterxml.jackson.core:jackson-databind'
-	runtimeOnly "org.mariadb.jdbc:mariadb-java-client"
+	runtimeOnly "org.mariadb.jdbc:mariadb-java-client" //Maria DB 의존성 등록
 }
 /*
 tasks.named('test') {
